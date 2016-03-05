@@ -1,0 +1,28 @@
+{
+  "name": "koa-rest-cache",
+  "version": "1.0.0",
+  "description": "Very simple cache middleware for restful apis in koa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hodavidhara/koa-rest-cache.git"
+  },
+  "keywords": [
+    "koa",
+    "middleware",
+    "cache",
+    "rest"
+  ],
+  "author": "David Hara <hodavidhara@gmail.com> (http://hodavidhara.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hodavidhara/koa-rest-cache/issues"
+  },
+  "homepage": "https://github.com/hodavidhara/koa-rest-cache#readme",
+  "dependencies": {
+    "minimatch": "^3.0.0"
+  }
+}
