@@ -18,22 +18,17 @@ const cache = function(options) {
       const shouldCache = pathsMatch(options.pattern, path);
 
       if (shouldCache && _cache[path]) {
-        const cached = _cache[path];
-        if (Date.now() - cached.age > options.maxAge) {
-          delete _cache[path];
-        } else {
-          this.body = _cache[path].data;
-          return;
-        }
+        this.body = _cache[path];
+        return;
       }
 
       yield next;
 
       if (shouldCache) {
-        _cache[path] = {
-          data: this.body,
-          age: Date.now()
-        }
+        _cache[path] = this.body;
+        setTimeout(() => {
+          delete _cache[path];
+        }, options.maxAge);
       }
     } else {
       yield next;
