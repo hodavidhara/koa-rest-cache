@@ -2,9 +2,9 @@
   "name": "koa-rest-cache",
   "version": "1.0.0",
   "description": "Very simple cache middleware for restful apis in koa",
-  "main": "index.js",
+  "main": "cache.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,13 @@
   "homepage": "https://github.com/hodavidhara/koa-rest-cache#readme",
   "dependencies": {
     "minimatch": "^3.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "koa": "^1.2.0",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
+    "supertest": "^1.2.0"
   }
 }

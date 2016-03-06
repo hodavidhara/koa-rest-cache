@@ -1,14 +1,34 @@
 "use strict";
 const minimatch = require('minimatch');
 
-// TODO: Decide whether or not to use a timeout to remove stale items.
+const DEFAULT_PROPS = {
+    maxAge: 600000 // 10 minutes
+};
+
+const pathsMatch = (pattern, path) => {
+    let pathMatch;
+    if (!pattern) {
+        pathMatch = true;
+    } else if (typeof pattern === 'string' || pattern instanceof String) {
+        pathMatch = minimatch(path, pattern);
+    } else if (pattern instanceof Array) {
+        pathMatch = pattern.some((pattern) => {
+            return minimatch(path, pattern);
+        });
+    } else {
+        pathMatch = false;
+    }
+    return pathMatch;
+};
+
 const cache = function(cacheProps) {
     const _cache = {};
+    cacheProps = Object.assign({}, DEFAULT_PROPS, cacheProps);
 
     return function*(next) {
         if (this.method === 'GET') {
             const path = this.request.path;
-            const shouldCache = shouldCache(cacheProps.pattern, path);
+            const shouldCache = pathsMatch(cacheProps.pattern, path);
 
             if (shouldCache && _cache[path]) {
                 const cached = _cache[path];
@@ -23,7 +43,6 @@ const cache = function(cacheProps) {
             yield next;
 
             if (shouldCache) {
-
                 _cache[path] = {
                     data: this.body,
                     age: Date.now()
@@ -34,19 +53,5 @@ const cache = function(cacheProps) {
         }
     };
 };
-
-function shouldCache(pattern, path) {
-    let shouldCache;
-    if (typeof pattern === 'string' || pattern instanceof String) {
-        shouldCache = minimatch(path, pattern);
-    } else if (pattern instanceof Array) {
-        shouldCache = pattern.some((pattern) => {
-                return minimatch(path, pattern);
-    });
-    } else {
-        shouldCache = false;
-    }
-    return shouldCache;
-}
 
 module.exports = cache;
