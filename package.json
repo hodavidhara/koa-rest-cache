@@ -4,7 +4,8 @@
   "description": "Very simple cache middleware for restful apis in koa",
   "main": "cache.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "watch": "mocha -w"
   },
   "repository": {
     "type": "git",
