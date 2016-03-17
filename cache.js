@@ -3,7 +3,8 @@ const minimatch = require('minimatch');
 const validation = require('./src/validation');
 
 const DEFAULT_OPTIONS = {
-  maxAge: 600000 // 10 minutes
+  maxAge: 600000, // 10 minutes
+  method: 'GET'
 };
 
 const cache = function(options) {
@@ -13,21 +14,22 @@ const cache = function(options) {
   options = Object.assign({}, DEFAULT_OPTIONS, options);
 
   return function*(next) {
-    if (this.method === 'GET') {
+    if (methodsMatch(options.method, this.method)) {
       const path = this.request.path;
+      const cacheKey = `${this.method}|${path}`;
       const shouldCache = pathsMatch(options.pattern, path);
 
-      if (shouldCache && _cache[path]) {
-        this.body = _cache[path];
+      if (shouldCache && _cache[cacheKey]) {
+        this.body = _cache[cacheKey];
         return;
       }
 
       yield next;
 
       if (shouldCache) {
-        _cache[path] = this.body;
+        _cache[cacheKey] = this.body;
         setTimeout(() => {
-          delete _cache[path];
+          delete _cache[cacheKey];
         }, options.maxAge);
       }
     } else {
@@ -50,6 +52,22 @@ const pathsMatch = (pattern, path) => {
     pathMatch = false;
   }
   return pathMatch;
+};
+
+const methodsMatch = (pattern, method) => {
+  let methodMatch;
+  if (!pattern) {
+    methodMatch = true;
+  } else if (validation.isString(pattern)) {
+    methodMatch = pattern.toUpperCase() === method.toUpperCase();
+  } else if (pattern instanceof Array) {
+    methodMatch = pattern.some((singlePattern) => {
+      return singlePattern.toUpperCase() === method.toUpperCase();
+    });
+  } else {
+    methodMatch = false;
+  }
+  return methodMatch;
 };
 
 module.exports = cache;
