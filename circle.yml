@@ -4,4 +4,4 @@ machine:
 test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/mocha
-    - mocha --reporter mocha-junit-reporter --reporter-options mochaFile=$CIRCLE_TEST_REPORTS/mocha
+    - mocha --reporter mocha-junit-reporter --reporter-options mochaFile=$CIRCLE_TEST_REPORTS/mocha/test-results.xml
