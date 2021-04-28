@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "13:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: supertest
+    versions:
+    - 6.0.1
+  - dependency-name: mocha
+    versions:
+    - 8.2.1
+  - dependency-name: koa
+    versions:
+    - 2.13.0
+  - dependency-name: chai
+    versions:
+    - 4.2.0
